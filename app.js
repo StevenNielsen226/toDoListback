@@ -11,7 +11,7 @@ const corsOptions = {
   optionsSuccessStatus: 200,
 };
 app.use(cors(corsOptions));
-app.use(express.json);
+app.use(express.json());
 
 app.get("/todos", async (req, res) => {
   const todos = await Todos.find();
