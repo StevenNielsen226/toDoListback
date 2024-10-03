@@ -5,7 +5,11 @@ const Todos = require("./models/Todos");
 const mongoose = require("mongoose");
 require("dotenv").config();
 mongoose.connect(`${process.env.MONGODB_API_KEY}`);
-app.use(cors());
+const corsOptions = {
+  origin: "https://steventodo.netlify.app/",
+  optionsSuccessStatus: 200,
+};
+app.use(cors(corsOptions));
 app.use(express.json);
 
 app.get("/todos", async (req, res) => {
@@ -13,13 +17,24 @@ app.get("/todos", async (req, res) => {
   res.json({ todos: todos });
 });
 app.post("/add-item", async (req, res) => {
-  await Todos.create(req.body);
+  const newTodo = await Todos.create(req.body);
+  res.json(newTodo);
 });
 app.post("/edit-item/:id", async (req, res) => {
-  await Todos.findOneAndUpdate({ id: req.params.id }, req.body);
+  try {
+    const updatedTodo = await Todos.findOneAndUpdate(
+      { id: req.params.id },
+      { $set: { text: req.body.text, completed: req.body.completed } },
+      { new: true }
+    );
+    res.json(updatedTodo);
+  } catch (err) {
+    res.status(500).json({ err: "failed to update todo" });
+  }
 });
 app.delete("/delete-item/:id", async (req, res) => {
   await Todos.deleteOne({ id: req.params.id });
+  res.json({ message: "todo was deleted successfully!" });
 });
 app.listen(5000, () => {
   console.log("server is running on Port 5000");
