@@ -24,13 +24,13 @@ app.post("/add-item", async (req, res) => {
 app.post("/edit-item/:id", async (req, res) => {
   try {
     const updatedTodo = await Todos.findOneAndUpdate(
-      { id: req.params.id },
+      { _id: req.params.id },
       { $set: { text: req.body.text, completed: req.body.completed } },
       { new: true }
     );
     res.json(updatedTodo);
-  } catch (err) {
-    res.status(500).json({ err: "failed to update todo" });
+  } catch (error) {
+    res.status(500).json({ error: "failed to update todo" });
   }
 });
 app.delete("/delete-item/:id", async (req, res) => {
