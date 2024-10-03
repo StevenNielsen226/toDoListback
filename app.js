@@ -5,6 +5,7 @@ const Todos = require("./models/Todos");
 const mongoose = require("mongoose");
 require("dotenv").config();
 mongoose.connect(`${process.env.MONGODB_API_KEY}`);
+const PORT = process.env.PORT || 5000;
 const corsOptions = {
   origin: "https://steventodo.netlify.app/",
   optionsSuccessStatus: 200,
@@ -36,6 +37,6 @@ app.delete("/delete-item/:id", async (req, res) => {
   await Todos.deleteOne({ id: req.params.id });
   res.json({ message: "todo was deleted successfully!" });
 });
-app.listen(5000, () => {
+app.listen(PORT, "0.0.0.0", () => {
   console.log("server is running on Port 5000");
 });
