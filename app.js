@@ -34,7 +34,7 @@ app.post("/edit-item/:id", async (req, res) => {
   }
 });
 app.delete("/delete-item/:id", async (req, res) => {
-  await Todos.deleteOne({ id: req.params.id });
+  await Todos.deleteOne({ _id: req.params.id });
   res.json({ message: "todo was deleted successfully!" });
 });
 app.listen(PORT, "0.0.0.0", () => {
